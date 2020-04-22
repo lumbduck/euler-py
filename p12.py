@@ -16,7 +16,7 @@ We can see that 28 is the first triangle number to have over five divisors.
 
 What is the value of the first triangle number to have over five hundred divisors?
 """
-from lib.prime import prime_factors
+from lib.prime import prime_factors as prime_factors
 from lib.seq import triangle_num
 
 from datetime import datetime
@@ -43,10 +43,8 @@ factor_count = 1
 
 while factor_count <= divisibility_target:
     n += 1
-
     n_factors = next_factors
     next_factors = prime_factors(n + 1)
-    # print(n, n_factors)
 
     merged = merge_factors(n_factors, next_factors)
 

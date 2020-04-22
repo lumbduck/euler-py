@@ -86,3 +86,19 @@ def prime_factors(n):
         k += 1
 
     return factors
+
+
+# XXX: The following code supports a variation of prime_factors() that relies on precomputed primes
+# cached_primes = sieve_primes(max_prime=65500)
+
+
+# def prime_factors_cached(n):
+#     factors = dict()
+#     for p in cached_primes:
+#         n, factor_count = reduce_by_factor(n, p)
+#         if factor_count:
+#             factors[p] = factor_count
+#         if n <= 1:
+#             break
+
+#     return factors
