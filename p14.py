@@ -23,7 +23,7 @@ collatz_cache = {}
 
 
 def collatz_run(n):
-    "Return a Collatz sequence for n, terminating at 1"
+    "Return then length of a Collatz sequence for n"
     seq_n = []
     for c in collatz(n):
         if c in collatz_cache:
