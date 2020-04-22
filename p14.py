@@ -24,15 +24,15 @@ collatz_cache = {}
 
 def collatz_run(n):
     "Return then length of a Collatz sequence for n"
-    seq_n = []
+    curr_len = 0
     for c in collatz(n):
         if c in collatz_cache:
-            collatz_cache[n] = len(seq_n) + collatz_cache[c]
+            collatz_cache[n] = curr_len + collatz_cache[c]
             return collatz_cache[n]
         else:
-            seq_n.append(c)
+            curr_len += 1
 
-    collatz_cache[n] = len(seq_n)
+    collatz_cache[n] = curr_len
     return collatz_cache[n]
 
 
