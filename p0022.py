@@ -16,7 +16,9 @@ for i, x in enumerate(ascii_uppercase):
 sorted_names = None
 names_path = 'data/p22_names.txt'
 with open(names_path) as f:
-    sorted_names = sorted(f.read().replace('"', '').split(','))
+    sorted_names = f.read().replace('"', '').split(',')
+
+sorted_names.sort()
 
 
 def score_letters(name):
