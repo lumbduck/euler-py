@@ -21,17 +21,15 @@ min_abund = 12  # Smallest abundant number
 @lru_cache(maxsize=None)
 def is_abundant(n):
     if n < min_abund:
-        return False
+        return
     elif sum_divisors(n) > n:
         return True
-    else:
-        return False
 
 
 # Sum of terms which are NOT the sum of two abundant numbers
 running_total = 0
 
-for n in range(2 * min_abund, limit - min_abund + 1):
+for n in range(1, limit - min_abund + 1):
     will_count = True
     # Only count if cannot be written as sum of two abundant numbers
     for i in range(min_abund, n // 2 + 1):
