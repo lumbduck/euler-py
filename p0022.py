@@ -12,17 +12,17 @@ letter_values = {}
 for i, x in enumerate(ascii_uppercase):
     letter_values[x] = i + 1
 
+
+def score_letters(name):
+    return sum(letter_values[l] for l in name)
+
+
 # Extract and sort names
 sorted_names = None
 names_path = 'data/p22_names.txt'
 with open(names_path) as f:
     sorted_names = f.read().replace('"', '').split(',')
 
+
 sorted_names.sort()
-
-
-def score_letters(name):
-    return sum(letter_values[l] for l in name)
-
-
 print(sum(score_letters(name) * (i + 1) for i, name in enumerate(sorted_names)))
