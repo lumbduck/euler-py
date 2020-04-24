@@ -1,6 +1,8 @@
 from collections import defaultdict
+from functools import reduce
+from itertools import takewhile, product
 from math import sqrt
-from itertools import takewhile
+from operator import mul
 
 
 def prime_factors_old(n):
@@ -102,3 +104,16 @@ def prime_factors(n):
 #             break
 
 #     return factors
+
+
+def generate_divisors(factorization):
+    raised_factors = []
+    for k, v in factorization.items():
+        raised_factors.append([k**i for i in range(v + 1)])
+
+    # Generate all possible products of prime factors to get all proper divisors
+    product_components = product(*raised_factors)
+    divisors = [reduce(mul, components) for components in product_components]
+    # Remove original number from divisor list
+    divisors = divisors[:-1]
+    return divisors
