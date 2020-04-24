@@ -1,5 +1,5 @@
 from collections import defaultdict
-from functools import reduce
+from functools import reduce, lru_cache
 from itertools import takewhile, product
 from math import sqrt
 from operator import mul
@@ -117,3 +117,15 @@ def generate_divisors(factorization):
     # Remove original number from divisor list
     divisors = divisors[:-1]
     return divisors
+
+
+def sum_raised_primes(p, power_of_p):
+    return int((p**(power_of_p + 1) - 1) / (p - 1))
+
+
+@lru_cache(maxsize=None)
+def sum_divisors(n):
+    if n == 1:
+        return 0
+    factorization = prime_factors(n)
+    return reduce(mul, (sum_raised_primes(p, k) for p, k in factorization.items())) - n

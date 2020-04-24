@@ -6,25 +6,9 @@ For example, the proper divisors of 220 are 1, 2, 4, 5, 10, 11, 20, 22, 44, 55 a
 
 Evaluate the sum of all the amicable numbers under 10000.
 """
-from functools import reduce, lru_cache
-from operator import mul
-
-from lib.prime import prime_factors
+from lib.prime import sum_divisors
 
 limit = 10000
-
-
-def sum_raised_primes(p, power_of_p):
-    return int((p**(power_of_p + 1) - 1) / (p - 1))
-
-
-@lru_cache(maxsize=None)
-def sum_divisors(n):
-    if n == 1:
-        return 0
-    factorization = prime_factors(n)
-    return reduce(mul, (sum_raised_primes(p, k) for p, k in factorization.items())) - n
-
 
 amicable_sums = 0
 for n in range(2, limit + 1):
