@@ -5,19 +5,8 @@ from math import sqrt
 from operator import mul
 
 
-def prime_factors_old(n):
-    factors = defaultdict(int)
-
-    trial_factor = 2
-    while n > 1:
-        q, r = divmod(n, trial_factor)
-        if r == 0:
-            n = q
-            factors[trial_factor] += 1
-        else:
-            trial_factor += 1
-
-    return factors
+# A cache of sequential primes for avoiding multiple runs of :func sieve_primes:
+CACHED_PRIMES = []
 
 
 def sieve_primes(max_prime=None, num_primes=None):
@@ -25,12 +14,26 @@ def sieve_primes(max_prime=None, num_primes=None):
         # TODO: Is there some way to take advantage of type hints (`import typing`)
         raise TypeError("Must provide an integer for at least one of :max_prime: or :num_primes:")
 
-    if max_prime == 2 or num_primes == 1:
+    # Check cache before calculating
+    global CACHED_PRIMES
+    if max_prime and max_prime in CACHED_PRIMES:
+        return CACHED_PRIMES[:CACHED_PRIMES.index(max_prime) + 1]
+    elif num_primes and num_primes <= len(CACHED_PRIMES):
+        return CACHED_PRIMES[:num_primes + 1]
+
+    # Special case for 2 since we don't want to deal with even numbers
+    elif max_prime == 2 or num_primes == 1:
+        CACHED_PRIMES = [2]
         return [2]
 
-    primes = [3]  # ignoring 2 because we won't be testing even numbers
+    # Set starting conditions
+    if CACHED_PRIMES and len(CACHED_PRIMES) > 1:
+        primes = CACHED_PRIMES[1:]  # Will reinsert 2 at end
+        test_num = primes[-1] + 2
+    else:
+        primes = [3]  # Will insert 2 at index 0 later
+        test_num = 5
 
-    test_num = 5
     # Conditions for controlling the loop
     # Note that for the :num_primes: case, since 2 is left out of the primes, we need one less in the limit
     condition_basis = test_num if max_prime else len(primes)
@@ -55,6 +58,8 @@ def sieve_primes(max_prime=None, num_primes=None):
         condition_limit = max_prime + 1 if max_prime else num_primes - 1
 
     primes.insert(0, 2)
+    CACHED_PRIMES = primes
+
     return primes
 
 
@@ -129,3 +134,31 @@ def sum_divisors(n):
         return 0
     factorization = prime_factors(n)
     return reduce(mul, (sum_raised_primes(p, k) for p, k in factorization.items())) - n
+
+
+@lru_cache(maxsize=None)
+def is_prime(n):
+    # NOTE: Due to generation of :global CACHED_PRIMES:, if you plan on testing many primes then performance is improved by testing large primes first.
+    if n < 2:
+        return False
+
+    global CACHED_PRIMES
+    if n in CACHED_PRIMES or n in sieve_primes(max_prime=n):
+        return True
+    else:
+        return False
+
+
+def prime_factors_old(n):
+    factors = defaultdict(int)
+
+    trial_factor = 2
+    while n > 1:
+        q, r = divmod(n, trial_factor)
+        if r == 0:
+            n = q
+            factors[trial_factor] += 1
+        else:
+            trial_factor += 1
+
+    return factors

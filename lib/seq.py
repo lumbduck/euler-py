@@ -11,7 +11,7 @@ def collatz(n):
 
 
 def fib(n=None):
-    """Generator for n Fibonnaci numbers, (or n can be left as none for infinite iteration)."""
+    """Generates n Fibonnaci numbers, (or leave n=None for infinite iteration)."""
     prev = 0
     curr = 1
     if n is not None and n >= 0:
