@@ -6,7 +6,7 @@ from operator import mul
 
 
 # A cache of sequential primes for avoiding multiple runs of :func sieve_primes:
-CACHED_PRIMES = []
+CACHED_PRIMES = [2]
 
 
 def sieve_primes(max_prime=None, num_primes=None):
@@ -16,14 +16,13 @@ def sieve_primes(max_prime=None, num_primes=None):
 
     # Check cache before calculating
     global CACHED_PRIMES
-    if max_prime and max_prime in CACHED_PRIMES:
-        return CACHED_PRIMES[:CACHED_PRIMES.index(max_prime) + 1]
+    if max_prime and max_prime <= CACHED_PRIMES[-1]:
+        return takewhile(lambda x: x <= max_prime, CACHED_PRIMES)
     elif num_primes and num_primes <= len(CACHED_PRIMES):
         return CACHED_PRIMES[:num_primes + 1]
 
     # Special case for 2 since we don't want to deal with even numbers
     elif max_prime == 2 or num_primes == 1:
-        CACHED_PRIMES = [2]
         return [2]
 
     # Set starting conditions
