@@ -39,8 +39,9 @@ def sieve_primes(max_prime=None, num_primes=None):
     condition_limit = max_prime + 1 if max_prime else num_primes - 1
 
     while condition_basis < condition_limit:
+        sqrt_test_num = sqrt(test_num)
         is_composite = False
-        for p in takewhile(lambda x: x <= sqrt(test_num), primes):
+        for p in takewhile(lambda x: x <= sqrt_test_num, primes):
             if test_num % p == 0:
                 is_composite = True
                 break
@@ -74,6 +75,7 @@ def reduce_by_factor(n, reduct):
     return (n_reduced, reduct_count)
 
 
+@lru_cache(maxsize=None)
 def prime_factors(n):
     factors = dict()
     n_reduced, factor_count = reduce_by_factor(n, 2)
@@ -108,6 +110,15 @@ def prime_factors(n):
 #             break
 
 #     return factors
+
+
+def cancel_common_factors(i_fact, j_fact):
+    min_factors = {p: min(i_fact.get(p, 0), j_fact.get(p, 0)) for p in set(i_fact).union(j_fact)}
+    return {p: i_fact[p] - min_factors[p] for p in i_fact}, {p: j_fact[p] - min_factors[p] for p in j_fact}
+
+
+def reduce_factorization(factorization):
+    return reduce(mul, (p**k for p, k in factorization.items()))
 
 
 def generate_divisors(factorization):
