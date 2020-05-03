@@ -77,14 +77,22 @@ def reduce_by_factor(n, reduct):
 
 @lru_cache(maxsize=None)
 def prime_factors(n):
+    """Return dict of prime factorization of n, in the form {prime_i: power_i} for primes [prime_1, prime_2,...]."""
+    if n < 2:
+        return {}
+
     factors = dict()
+
+    # Special case 2
     n_reduced, factor_count = reduce_by_factor(n, 2)
     if factor_count:
         factors[2] = factor_count
+    # Special case 3
     n_reduced, factor_count = reduce_by_factor(n_reduced, 3)
     if factor_count:
         factors[3] = factor_count
 
+    # Remaining primes are all of the form 6*k +/- 1
     k = 1
     while n_reduced > 1:
         for test_factor in (6 * k - 1, 6 * k + 1):
@@ -96,20 +104,29 @@ def prime_factors(n):
     return factors
 
 
-# XXX: The following code supports a variation of prime_factors() that relies on precomputed primes
-# cached_primes = sieve_primes(max_prime=65500)
+@lru_cache(maxsize=None)
+def prime_factors_precomputed(n):
+    """
+    Return dict of prime factorization of n, in the form {prime_i: power_i} for primes [prime_1, prime_2,...].
 
+    Precomputes primes, which improves performance over :func prime_factors: when iterating over many factorizations.
+    """
+    if n < 2:
+        return {}
 
-# def prime_factors_cached(n):
-#     factors = dict()
-#     for p in cached_primes:
-#         n, factor_count = reduce_by_factor(n, p)
-#         if factor_count:
-#             factors[p] = factor_count
-#         if n <= 1:
-#             break
+    factors = dict()
+    for p in sieve_primes(max_prime=sqrt(n) + 1):
+        n, factor_count = reduce_by_factor(n, p)
+        if factor_count:
+            factors[p] = factor_count
+        if n <= 1:
+            break
 
-#     return factors
+    if n > 1:
+        # After dividing out all primes up to sqrt(n), if n is still not 1 then the remainder is prime
+        factors[n] = 1
+
+    return factors
 
 
 def cancel_common_factors(i_fact, j_fact):
@@ -152,23 +169,7 @@ def is_prime(n):
     if n < 2:
         return False
 
-    global CACHED_PRIMES
     if n in CACHED_PRIMES or n in sieve_primes(max_prime=n):
         return True
     else:
         return False
-
-
-def prime_factors_old(n):
-    factors = defaultdict(int)
-
-    trial_factor = 2
-    while n > 1:
-        q, r = divmod(n, trial_factor)
-        if r == 0:
-            n = q
-            factors[trial_factor] += 1
-        else:
-            trial_factor += 1
-
-    return factors
