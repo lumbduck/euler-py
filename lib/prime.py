@@ -1,4 +1,3 @@
-from collections import defaultdict
 from functools import reduce, lru_cache
 from itertools import takewhile, product
 from math import sqrt
