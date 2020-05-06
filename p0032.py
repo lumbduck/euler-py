@@ -11,7 +11,7 @@ from functools import lru_cache
 from string import digits
 import time
 
-from lib.numb import num_digits
+from lib.numb import num_digits, reverse
 
 start_time = time.time()
 
@@ -20,12 +20,6 @@ start_time = time.time()
 # whose digits are a subset of the following characters (this is format returned by :func reduce_digits:):
 positive_digits = digits[1:]
 base = 10
-
-
-def reverse(s):
-    "Return string in reverse (converts numbers to strings)"
-    # For some reason this is slightly faster than str(s)[::-1]
-    return ''.join(reversed(str(s)))
 
 
 @lru_cache(maxsize=None)

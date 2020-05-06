@@ -1,4 +1,6 @@
-from lib.numb import incr, to_base, to_str
+from itertools import permutations
+
+from lib.numb import incr, POSITIVE_DIGITS, reverse, to_base, to_str
 
 
 def collatz(n):
@@ -105,3 +107,11 @@ def palindromes(lower=None, upper=None, base=10):
                 pal_prefix = pal_prefix[:-1]
 
         curr_pal = pal_prefix + middle_digit + pal_prefix[::-1]
+
+
+def pandigitals(d, reverse_order=False):
+    """Return generator for d-digit pandigital numbers."""
+    assert d < 10, "Pandigitals can be generated with at most 9 digits"
+    pandigits = POSITIVE_DIGITS[:d] if not reverse_order else reverse(POSITIVE_DIGITS[:d])
+    for n in permutations(pandigits):
+        yield int(''.join(n))

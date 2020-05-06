@@ -1,5 +1,8 @@
 from functools import lru_cache
 import math
+from string import digits
+
+POSITIVE_DIGITS = digits[1:]
 
 
 @lru_cache(maxsize=None)
@@ -22,10 +25,20 @@ def incr(n, base=10, incr=1):
     return to_str((int(str(n), base) + incr), base)
 
 
+def reverse(n):
+    "Return string in reverse (converts numbers to strings)"
+    # For some reason this is slightly faster than str(s)[::-1]
+    return ''.join(reversed(str(n)))
+
+
 def is_palindrome(x):
     str_x = str(x)
     if list(str_x) == list(reversed(str_x)):
         return True
+
+
+def is_pandigital(n, pandigits):
+    return num_digits(n) == len(pandigits) and set(str(n)) == set(pandigits)
 
 
 def to_base(n, base=10):
