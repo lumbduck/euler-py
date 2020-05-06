@@ -5,7 +5,14 @@ from operator import mul
 
 
 # A cache of sequential primes for avoiding multiple runs of :func sieve_primes:
-CACHED_PRIMES = [2]
+CACHED_PRIMES_L = [2]
+CACHED_PRIMES = set(CACHED_PRIMES_L)
+
+
+def update_cached_primes(sorted_cache):
+    global CACHED_PRIMES, CACHED_PRIMES_L
+    CACHED_PRIMES_L = sorted_cache
+    CACHED_PRIMES = set(CACHED_PRIMES_L)
 
 
 def sieve_primes(max_prime=None, num_primes=None):
@@ -14,11 +21,10 @@ def sieve_primes(max_prime=None, num_primes=None):
         raise TypeError("Must provide an integer for at least one of :max_prime: or :num_primes:")
 
     # Check cache before calculating
-    global CACHED_PRIMES
-    if max_prime and max_prime <= CACHED_PRIMES[-1]:
-        return takewhile(lambda x: x <= max_prime, CACHED_PRIMES)
+    if max_prime and max_prime <= CACHED_PRIMES_L[-1]:
+        return [p for p in CACHED_PRIMES_L if p <= max_prime]
     elif num_primes and num_primes <= len(CACHED_PRIMES):
-        return CACHED_PRIMES[:num_primes + 1]
+        return CACHED_PRIMES_L[:num_primes + 1]
 
     # Special case for 2 since we don't want to deal with even numbers
     elif max_prime == 2 or num_primes == 1:
@@ -26,7 +32,7 @@ def sieve_primes(max_prime=None, num_primes=None):
 
     # Set starting conditions
     if CACHED_PRIMES and len(CACHED_PRIMES) > 1:
-        primes = CACHED_PRIMES[1:]  # Will reinsert 2 at end
+        primes = CACHED_PRIMES_L[1:]  # Will reinsert 2 at end
         test_num = primes[-1] + 2
     else:
         primes = [3]  # Will insert 2 at index 0 later
@@ -57,7 +63,7 @@ def sieve_primes(max_prime=None, num_primes=None):
         condition_limit = max_prime + 1 if max_prime else num_primes - 1
 
     primes.insert(0, 2)
-    CACHED_PRIMES = primes
+    update_cached_primes(primes)
 
     return primes
 
@@ -163,12 +169,29 @@ def sum_divisors(n):
 
 
 @lru_cache(maxsize=None)
-def is_prime(n):
+def is_prime(n, cache_primes=True):
     # NOTE: Due to generation of :global CACHED_PRIMES:, if you plan on testing many primes then performance is improved by testing large primes first.
     if n < 2:
         return False
-
-    if n in CACHED_PRIMES or n in sieve_primes(max_prime=n):
-        return True
+    elif cache_primes:
+        if n <= CACHED_PRIMES_L[-1]:
+            if n in CACHED_PRIMES:
+                return True
+        elif n in sieve_primes(max_prime=n):
+            return True
+        else:
+            return False
     else:
-        return False
+        # Special case 2 and 3
+        if n in (2, 3):
+            return True
+        elif n % 2 == 0 or n % 3 == 0:
+            return False
+        else:
+            # Remaining primes are all of the form 6*k +/- 1
+            for k in range(1, int(sqrt(n) + 1) // 6):
+                for test_factor in (6 * k - 1, 6 * k + 1):
+                    if n % test_factor == 0:
+                        return False
+
+    return True

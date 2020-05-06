@@ -40,27 +40,13 @@ def truncatable(p):
     return r_truncatable(p) and l_truncatable(p)
 
 
-# NOTE: Non-recursive truncation loop. This is not used.
-def truncations(p):
-    trunc_set = set()
-    p_left = p_right = str(p)
-    trunc_set.add(p_left)
-    trunc_set.add(p_right)
-    while len(p_left) > 1:
-        p_left = p_left[:-1]
-        p_right = p_right[1:]
-        trunc_set.add(p_left)
-        trunc_set.add(p_right)
-
-    return sorted(trunc_set)
-
-
+# Since we know we need 11 results, this just sieves 10,000 numbers at a time to get more primes until we find 11.
 done = False
-for order in count():
+increment = 10000
+for iteration in count(1):
     if done:
         break
-    next_primes = filter(lambda x: x > 10**(order - 1), sieve_primes(max_prime=10**order))
-    print("Finished sieving for order {}\nTesting truncations...".format(order))
+    next_primes = filter(lambda x: x > increment * (iteration - 1), sieve_primes(max_prime=increment * iteration))
     for p in next_primes:
         if p < 10:
             continue
@@ -72,17 +58,6 @@ for order in count():
                 done = True
                 break
 
-# XXX: Why does this run slower??
-# cProfile says sieve_primes gets called about the same number of times, which should NOT be the case here. It should be called once.
-# for p in sieve_primes(max_prime=10**6):
-#     if p < 10:
-#         continue
-#     if truncatable(p):
-#         trunc_set.add(p)
-#         trunc_count += 1
-#         print(p)
-#         if trunc_count >= limit:
-#             break
 
 print("Truncatable primes: {}\nSum: {}".format(sorted(trunc_set), sum(trunc_set)))
 print("Execution time: {}".format(time.time() - start_time))
