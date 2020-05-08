@@ -1,9 +1,13 @@
 from itertools import permutations
+from math import sqrt
 
-from lib.numb import incr, POSITIVE_DIGITS, reverse, to_base, to_str
+from numb import incr, POSITIVE_DIGITS, reverse, to_base, to_str
 
 
-def collatz(n):
+# Generators
+
+def collatz(n=None):
+    """Return generator for the terms of the collatz sequence for n."""
     while True:
         yield n
         if n == 1:
@@ -16,7 +20,7 @@ def collatz(n):
 
 
 def fib(n=None):
-    """Generates n Fibonnaci numbers, (or leave n=None for infinite iteration)."""
+    """Return generator for the first n Fibonnaci numbers, (or leave n=None for infinite iteration)."""
     prev = 0
     curr = 1
     if n is not None and n >= 0:
@@ -33,8 +37,83 @@ def fib(n=None):
             curr = new
 
 
-def triangle_num(n):
-    return int(n * (n + 1) / 2)
+def pair_iter(start=1, asymmetric=True, strategy='descending'):
+    """
+    Return a generator which iterates over pairs of integers (i, j) in a regular pattern.
+
+    Parameters:
+        :bool asymmetric: If True, i < j for all pairs. Otherwise all possible 2 tuples are traversed.
+        :str strategy: Allows `ascending`, `descending`, or `alternating`. This determines if the first term is
+            incremented or decremented as the second term increases. For `alternating`, they both alternate direction.
+    """
+    i = j = start
+    if asymmetric:
+        if strategy == 'alternating':
+            while True:
+                j += 1
+                while i < j:
+                    yield i, j
+                    i += 1
+                j += 1
+                while i > 1:
+                    yield i, j
+                    i -= 1
+
+        elif strategy == 'ascending':
+            while True:
+                j += 1
+                while i < j:
+                    yield i, j
+                    i += 1
+                i = start
+
+        elif strategy == 'descending':
+            while True:
+                j += 1
+                while i >= start:
+                    yield i, j
+                    i -= 1
+                i = j
+
+        else:
+            raise ValueError("Specify a valid strategy.")
+
+    else:
+        if strategy == 'alternating':
+            while True:
+                yield i, j
+                j += 1
+                while j > start:
+                    yield i, j
+                    i += 1
+                    j -= 1
+                yield i, j
+                i += 1
+                while i > start:
+                    yield i, j
+                    i -= 1
+                    j += 1
+
+        if strategy == 'ascending':
+            while True:
+                yield i, j
+                j += 1
+                i = start
+                while i < j:
+                    yield i, j
+                    i += 1
+
+        if strategy == 'descending':
+            while True:
+                yield i, j
+                j += 1
+                i = j
+                while i > start:
+                    yield i, j
+                    i -= 1
+
+        else:
+            raise ValueError("Specify a valid strategy.")
 
 
 def palindromes(lower=None, upper=None, base=10):
@@ -109,9 +188,82 @@ def palindromes(lower=None, upper=None, base=10):
         curr_pal = pal_prefix + middle_digit + pal_prefix[::-1]
 
 
-def pandigitals(d, reverse_order=False):
-    """Return generator for d-digit pandigital numbers."""
-    assert d < 10, "Pandigitals can be generated with at most 9 digits"
+def pandigitals(d, reverse_order=False, include_zero=True):
+    """Return generator for d-digit pandigital numbers (or d+1 digits if :param include_zero:=True)."""
+    assert d < 10, "Pandigitals can be generated with at most 9 nonzero digits"
+
     pandigits = POSITIVE_DIGITS[:d] if not reverse_order else reverse(POSITIVE_DIGITS[:d])
-    for n in permutations(pandigits):
-        yield int(''.join(n))
+
+    if include_zero:
+        if reverse_order:
+            pandigits += '0'
+        else:
+            pandigits = '0' + pandigits
+        for n in filter(lambda x: x[0] != '0', permutations(pandigits)):
+            yield int(''.join(n))
+    else:
+        for n in permutations(pandigits):
+            yield int(''.join(n))
+
+
+# Closed form values from geometric sequences (along with inverse lookups and tests)
+
+def hexagonal_num(n):
+    """Return the nth hexagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return int(n * (2 * n - 1))
+
+
+def pentagonal_num(n):
+    """Return the nth pentagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return int(n * (3 * n - 1) / 2)
+
+
+def triangle_num(n):
+    """Return the nth triangle number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return int(n * (n + 1) / 2)
+
+
+def is_hexagonal(h):
+    """Return a positive integer n, such that `t` is the nth hexagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 8 * h)) / 4
+    return test_n.is_integer()
+
+
+def is_pentagonal(p):
+    """Return a positive integer n, such that `p` is the nth pentagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 24 * p)) / 6
+    return test_n.is_integer()
+
+
+def is_triangular(t):
+    """Return a positive integer n, such that `t` is the nth triangle number, if such an n exists."""
+    test_n = (-1 + sqrt(1 + 8 * t)) / 2
+    return test_n.is_integer()
+
+
+def which_hexagonal_num(h):
+    """Return a positive integer n, such that `t` is the nth hexagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 8 * h)) / 4
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def which_pentagonal_num(p):
+    """Return a positive integer n, such that `p` is the nth pentagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 24 * p)) / 6
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def which_triangle_num(t):
+    """Return a positive integer n, such that `t` is the nth triangle number, if such an n exists."""
+    test_n = (-1 + sqrt(1 + 8 * t)) / 2
+    if test_n.is_integer():
+        return int(test_n)
+
+
+for i in range(1, 100):
+    assert is_hexagonal(hexagonal_num(i)), "FAIL {}".format(i)

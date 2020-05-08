@@ -1,5 +1,5 @@
-from functools import reduce, lru_cache
-from itertools import takewhile, product
+from functools import lru_cache, reduce
+from itertools import count, product, takewhile
 from math import sqrt
 from operator import mul
 
@@ -9,15 +9,19 @@ CACHED_PRIMES_L = [2]
 CACHED_PRIMES = set(CACHED_PRIMES_L)
 
 
-def update_cached_primes(sorted_cache):
+# Generation and cache tools
+def update_prime_cache(sorted_cache):
     global CACHED_PRIMES, CACHED_PRIMES_L
     CACHED_PRIMES_L = sorted_cache
     CACHED_PRIMES = set(CACHED_PRIMES_L)
 
 
+def clear_prime_cache():
+    update_prime_cache([2])
+
+
 def sieve_primes(max_prime=None, num_primes=None):
     if (not max_prime and not num_primes):
-        # TODO: Is there some way to take advantage of type hints (`import typing`)
         raise TypeError("Must provide an integer for at least one of :max_prime: or :num_primes:")
 
     # Check cache before calculating
@@ -63,11 +67,56 @@ def sieve_primes(max_prime=None, num_primes=None):
         condition_limit = max_prime + 1 if max_prime else num_primes - 1
 
     primes.insert(0, 2)
-    update_cached_primes(primes)
+    update_prime_cache(primes)
 
     return primes
 
 
+def primes(step=10000, reverse=False):
+    """Return infinite generator of primes, where :param step: indicates how to compromise performance by looking ahead."""
+    assert step >= 3, ":param step: must be at least 3"
+
+    low_index = 0
+
+    for i in count(1):
+        # Update cache while getting upper index for this step
+        high_index = len(sieve_primes(step * i))
+
+        # # XXX
+        # print("INDECES: {}, {}".format(low_index, high_index))
+        # if high_index > 10:
+        #     break
+
+        if high_index == low_index:
+            # The step was too small to find another prime
+
+            # TODO: Test and deploy warning feature
+            # step_failures += 1
+            # if step_failures % 100 == 0:
+            #     warn("step size failing to generate primes in :func primes: with :step:={} ({} skipped steps so far)".format(step, step_failures))
+            continue
+
+        if reverse:
+            # Start at the top of each step range
+            # NOTE: For reverse order slicing of the prime cache, the high_index is off by one
+            high_index -= 1
+            if not low_index:
+                for p in CACHED_PRIMES_L[high_index::-1]:
+                    yield p
+
+            else:
+                for p in CACHED_PRIMES_L[high_index:low_index:-1]:
+                    yield p
+
+        else:
+            for p in CACHED_PRIMES_L[low_index:high_index]:
+                yield p
+                low_index = p
+
+        low_index = high_index
+
+
+# Factoring tools
 def reduce_by_factor(n, reduct):
     n_reduced = n
     reduct_count = 0
@@ -134,6 +183,7 @@ def prime_factors_precomputed(n):
     return factors
 
 
+# Factorization tools that take parameters in format returned by :func prime_factors:
 def cancel_common_factors(i_fact, j_fact):
     min_factors = {p: min(i_fact.get(p, 0), j_fact.get(p, 0)) for p in set(i_fact).union(j_fact)}
     return {p: i_fact[p] - min_factors[p] for p in i_fact}, {p: j_fact[p] - min_factors[p] for p in j_fact}
@@ -156,27 +206,22 @@ def generate_divisors(factorization):
     return divisors
 
 
-def sum_raised_primes(p, power_of_p):
-    return int((p**(power_of_p + 1) - 1) / (p - 1))
-
-
-@lru_cache(maxsize=None)
-def sum_divisors(n):
-    if n == 1:
-        return 0
-    factorization = prime_factors(n)
-    return reduce(mul, (sum_raised_primes(p, k) for p, k in factorization.items())) - n
-
-
-@lru_cache(maxsize=None)
+# Miscellaneous
 def is_prime(n, cache_primes=True):
-    # NOTE: Due to generation of :global CACHED_PRIMES:, if you plan on testing many primes then performance is improved by testing large primes first.
+    """Return True if n is prime, and otherwise False.
+
+    Parameters:
+        :int n: integer to test for primality
+        :bool cache_primes: If True, generates all primes up `n` to test primality. If you plan on testing many primes then this can be exploited for performance gains by testing large primes first.
+    """
     if n < 2:
         return False
     elif cache_primes:
         if n <= CACHED_PRIMES_L[-1]:
             if n in CACHED_PRIMES:
                 return True
+            else:
+                return False
         elif n in sieve_primes(max_prime=n):
             return True
         else:
@@ -189,9 +234,25 @@ def is_prime(n, cache_primes=True):
             return False
         else:
             # Remaining primes are all of the form 6*k +/- 1
-            for k in range(1, int(sqrt(n) + 1) // 6):
+            for k in range(1, int(sqrt(n) + 1) // 6 + 1):
                 for test_factor in (6 * k - 1, 6 * k + 1):
                     if n % test_factor == 0:
                         return False
 
     return True
+
+
+def sum_raised_primes(p, power_of_p):
+    """Return sum of p raised to each power k, for 1 <= k <= power_of_p."""
+    # Given by a closed form expression
+    return int((p**(power_of_p + 1) - 1) / (p - 1))
+
+
+@lru_cache(maxsize=None)
+def sum_divisors(n):
+    """Return sum of all proper divisors of n (excludes n itself)."""
+    if n == 1:
+        return 0
+    # Return value is given by a closed form based on prime factorization
+    factorization = prime_factors(n)
+    return reduce(mul, (sum_raised_primes(p, k) for p, k in factorization.items())) - n

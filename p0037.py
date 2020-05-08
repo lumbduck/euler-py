@@ -5,9 +5,8 @@ Find the sum of the only eleven primes that are both truncatable from left to ri
 
 NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 """
-from lib.prime import is_prime, sieve_primes
+from lib.prime import is_prime, primes
 
-from itertools import count
 import time
 
 start_time = time.time()
@@ -40,23 +39,15 @@ def truncatable(p):
     return r_truncatable(p) and l_truncatable(p)
 
 
-# Since we know we need 11 results, this just sieves 10,000 numbers at a time to get more primes until we find 11.
-done = False
-increment = 10000
-for iteration in count(1):
-    if done:
-        break
-    next_primes = filter(lambda x: x > increment * (iteration - 1), sieve_primes(max_prime=increment * iteration))
-    for p in next_primes:
-        if p < 10:
-            continue
-        if truncatable(p):
-            trunc_set.add(p)
-            trunc_count += 1
-            print(p)
-            if trunc_count >= limit:
-                done = True
-                break
+for p in primes():
+    if p < 10:
+        continue
+    if truncatable(p):
+        trunc_set.add(p)
+        trunc_count += 1
+        print(p)
+        if trunc_count >= limit:
+            break
 
 
 print("Truncatable primes: {}\nSum: {}".format(sorted(trunc_set), sum(trunc_set)))
