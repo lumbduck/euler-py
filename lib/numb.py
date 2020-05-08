@@ -1,4 +1,5 @@
 from functools import lru_cache
+from itertools import permutations
 import math
 from string import digits
 
@@ -13,6 +14,15 @@ def num_digits(n, base=10):
         return 1
     else:
         return math.floor(math.log(n, base)) + 1
+
+
+def perm(n, preserve_length=True):
+    """Return set of numbers that are permutations of the digits of n."""
+    if preserve_length:
+        # Throw away any permutations that begin with a zero
+        return set(map(lambda x: int(''.join(x)), filter(lambda x: x[0] != '0', permutations(str(n)))))
+    else:
+        return set(map(lambda x: int(''.join(x)), permutations(str(n))))
 
 
 def incr(n, base=10, incr=1):

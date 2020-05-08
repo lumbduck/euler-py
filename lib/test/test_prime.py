@@ -96,6 +96,18 @@ def test_primes(clear_prime_cache):
         assert generated == primes, "Failed prime generator. (:step_size:={})".format(step_size)
 
 
+def test_primes_start_index(clear_prime_cache):
+    step_size = 14
+    for start_index in range(30):
+        generated = list()
+        for i, p in enumerate(prime.primes(start_index=start_index, step=step_size)):
+            if i >= 100 - start_index:
+                break
+            generated.append(p)
+
+        assert generated == primes[start_index:], "Failed prime generator with start_index {}. (:step_size:={})".format(start_index, step_size)
+
+
 def test_primes_reverse(clear_prime_cache):
     for step_size in range(3, 15):
         generated = list()

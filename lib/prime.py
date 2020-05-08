@@ -72,11 +72,11 @@ def sieve_primes(max_prime=None, num_primes=None):
     return primes
 
 
-def primes(step=10000, reverse=False):
+def primes(start_index=0, step=10000, reverse=False):
     """Return infinite generator of primes, where :param step: indicates how to compromise performance by looking ahead."""
     assert step >= 3, ":param step: must be at least 3"
 
-    low_index = 0
+    low_index = start_index
 
     for i in count(1):
         # Update cache while getting upper index for this step
@@ -87,8 +87,9 @@ def primes(step=10000, reverse=False):
         # if high_index > 10:
         #     break
 
-        if high_index == low_index:
-            # The step was too small to find another prime
+        low_index = max(start_index, low_index)
+        if high_index <= low_index:
+            # Either we haven't reached the starting index yet, or the step was too small to find another prime
 
             # TODO: Test and deploy warning feature
             # step_failures += 1
