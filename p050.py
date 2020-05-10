@@ -19,6 +19,7 @@ from prime import is_prime, primes
 limit = 1000000
 
 
+# ~4 seconds
 def dynamic_solution(limit=limit):
     """Keeps a running total of sums of primes and returns value of longest sum that is prime and less than limit."""
     start_time = time()
@@ -66,6 +67,7 @@ def dynamic_solution(limit=limit):
             return res[0]
 
 
+# ~260 seconds
 def slow_solution():
     """For each prime, p (starting from 2), finds the longest valid sum ending in p and returns the longest of these over all primes."""
     def sum_to_p(p, limit=limit):
