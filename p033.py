@@ -10,7 +10,7 @@ If the product of these four fractions is given in its lowest common terms, find
 from math import isclose
 import time
 
-from lib.prime import cancel_common_factors, expand_factorization, prime_factors
+from prime import cancel_common_factors, expand_factorization, prime_factors
 
 start_time = time.time()
 

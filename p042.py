@@ -7,8 +7,8 @@ By converting each letter in a word to a number corresponding to its alphabetica
 
 Using data/p42_words.txt, a 16K text file containing nearly two-thousand common English words, how many are triangle words?
 """
-from lib.seq import which_triangle_num
-from lib.words import word_value
+from seq import which_triangle_num
+from words import word_value
 
 
 with open('data/p42_words.txt') as fh:

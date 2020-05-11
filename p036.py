@@ -5,8 +5,8 @@ Find the sum of all numbers, less than one million, which are palindromic in bas
 
 (Please note that the palindromic number, in either base, may not include leading zeros.)
 """
-from lib.numb import is_palindrome
-from lib.seq import palindromes
+from numb import is_palindrome
+from seq import palindromes
 import time
 
 start_time = time.time()
