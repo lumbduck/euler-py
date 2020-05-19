@@ -1,6 +1,7 @@
-from functools import lru_cache
+from functools import lru_cache, reduce
 from itertools import permutations
 import math
+from operator import mul
 from string import digits
 
 POSITIVE_DIGITS = digits[1:]
@@ -14,6 +15,24 @@ def num_digits(n, base=10):
         return 1
     else:
         return math.floor(math.log(n, base)) + 1
+
+
+def same_digits(n, digits):
+    """Return True if n has exactly the digits in :param digits: (any iterable of digits)."""
+    return sorted(str(n)) == sorted(digits)
+
+
+def comb(n, k):
+    """Return nCr (n-choose-k)."""
+    # This is available as math.comb in python 3.8+
+    k = min(n - k, k)
+    if k <= 0:
+        return 1
+
+    p = reduce(mul, range(n, n - k, -1), 1)
+    q = reduce(mul, range(1, k + 1), 1)
+
+    return p // q
 
 
 def perm(n, preserve_length=True):
