@@ -28,6 +28,8 @@ def comb(n, k):
     k = min(n - k, k)
     if k <= 0:
         return 1
+    elif k == 1:
+        return n
 
     p = reduce(mul, range(n, n - k, -1), 1)
     q = reduce(mul, range(1, k + 1), 1)
