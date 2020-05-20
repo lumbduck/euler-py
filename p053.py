@@ -48,6 +48,23 @@ def combinatorial_solution():
     return total
 
 
+def combinatorial_solution_inverted():
+    total = 0
+
+    for n in range(23, n_limit + 1):
+        # Starting from the edge of the triangle, at comb(n, 1), we work toward the middle until exceeding the lower_bound
+        # At that point, all further values for that row (up to symmetry) will exceed the same bound.
+        # Thus we can simply count how many values are left from that point and ignore comb(n, k).
+        for k in range(n):
+            if comb(n, k) > lower_bound:
+                # NOTE: We know that n=23 gives 4 values over the 1000000. All subsequent rows have more.
+                # Thus we never have to worry about the middle value, comb(n, n/2) being miscounted when n is even.
+                total += n + 1 - 2 * k
+                break
+
+    return total
+
+
 def dynamic_solution_with_convolutions():
     """Use convolutions of [1, 1] to generate rows of Pascal's triangle (i.e., binomial coefficients)."""
     total = 0
@@ -94,6 +111,20 @@ def dynamic_solution():
     return total
 
 
-print(f"There are {dynamic_solution()} values of comb(n, r) that exceed {lower_bound} for natural numbers, n, up to {n_limit}")
-
+print(f"There are {dynamic_solution_with_convolutions()} values of comb(n, r) that exceed {lower_bound} for natural numbers, n, up to {n_limit}")
 elapsed()
+
+##################
+# Performance Testing
+##################
+# from timeit import timeit
+#
+# A lot of variation here, especially with numpy, but these the rough results
+# ~4.6s:
+# print(timeit(dynamic_solution, number=10000))
+#
+# ~5.5s:
+# print(timeit(combinatorial_solution_inverted, number=10000))
+#
+# ~4.4s
+# print(timeit(dynamic_solution_with_convolutions, number=10000))
