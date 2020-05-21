@@ -46,38 +46,25 @@ from common import elapsed
 
 f_path = 'data/p54_poker.txt'
 
-# Pre-generate straights for performance
+# Pre-generate ranks and straights
+rank_map = {r: i for i, r in enumerate('23456789TJQKA', 2)}
+
 # Each straight is a key value, representing the lowest rank in the hand, mapped to a set of the 4 other ranks.
 # NOTE: All rank keys are integers, retrievable via :func get_rank: below.
-straights = {
+straight_map = {
     r: set(range(r + 1, r + 5))
     for r in range(2, 11)
 }
 # Include ace-first straight and empty entries for other cards
-straights.update({14: set((2, 3, 4, 5))})
-straights.update({
+straight_map.update({14: set((2, 3, 4, 5))})
+straight_map.update({
     r: set()
     for r in range(11, 14)
 })
 
 
-def get_rank(card):
+def get_rank(card, rank_map=rank_map):
     """Return card rank as a value 2 - 14 (where 14 represents an Ace) to simplify comparisons."""
-    rank_map = {
-        '2': 2,
-        '3': 3,
-        '4': 4,
-        '5': 5,
-        '6': 6,
-        '7': 7,
-        '8': 8,
-        '9': 9,
-        'T': 10,
-        'J': 11,
-        'Q': 12,
-        'K': 13,
-        'A': 14,
-    }
     return rank_map[card[0]]
 
 
@@ -119,18 +106,18 @@ def flush(player):
         return player[1][0]
 
 
-def straight(player):
+def straight(player, straight_map=straight_map):
     """Return high card if hand is a straight."""
     ranks = player[1]
 
     # Special handling if hand has both an Ace and a 2 (since these ranks are not consecutive)
-    if ranks[0] == 14 and ranks[-1] == 2:
-        if set(ranks[1:]).issuperset(straights[14]):
+    if ranks[0] == 14 and ranks[1] == 5:
+        if set(ranks[1:]).issuperset(straight_map[14]):
             # The high card is always rank 5 for straights starting with an Ace
             return 5
 
     # Otherwise, straight must start with a Ten or lower
-    elif set(ranks[:-1]).issuperset(straights[ranks[-1]]):
+    elif set(ranks[:-1]).issuperset(straight_map[ranks[-1]]):
         return ranks[0]
 
 

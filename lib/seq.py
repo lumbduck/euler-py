@@ -161,7 +161,7 @@ def palindromes(lower=None, upper=None, base=10):
     # From here, we put the middle_digit back in and start the process over with pal_prefix = 10 and middle_digit = 0
     # Note how pal prefix must restart from 10 when middle_digit is put back in.
     # The next elements will include 10001, 10101,...,19991,...,99999, at which point pal_prefix becomes 100.
-    curr_pal = pal_prefix + middle_digit + pal_prefix[::-1]
+    curr_pal = pal_prefix + middle_digit + reverse(pal_prefix)
     while not upper or int(curr_pal, base) < upper:
         if int(curr_pal, base) >= lower:
             yield curr_pal

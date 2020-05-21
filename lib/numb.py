@@ -59,12 +59,12 @@ def incr(n, base=10, incr=1):
 def reverse(n):
     "Return string in reverse (converts numbers to strings)"
     # For some reason this is slightly faster than str(s)[::-1]
-    return ''.join(reversed(str(n)))
+    return str(n)[::-1]
 
 
 def is_palindrome(x):
     str_x = str(x)
-    if list(str_x) == list(reversed(str_x)):
+    if tuple(str_x) == tuple(reversed(str_x)):
         return True
 
 
