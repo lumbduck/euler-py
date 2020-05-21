@@ -238,12 +238,7 @@ def compare_players(player1, player2):
             return True
         else:
             # Compare high card (one four of a kind must be higher than the other)
-            if kind_rank1 > kind_rank2:
-                return True
-            elif kind_rank1 < kind_rank2:
-                return False
-            else:
-                return remove_rank(kind_rank1, player1[1]) > remove_rank(kind_rank2, player2[1])
+            return kind_rank1 > kind_rank2
 
     elif kind_length2 == 4:
         return False
@@ -290,13 +285,8 @@ def compare_players(player1, player2):
         if kind_length2 < 3:
             return True
         else:
-            # Compare high card (one three of a kind SHOULD be higher than the other)
-            if kind_rank1 > kind_rank2:
-                return True
-            elif kind_rank1 < kind_rank2:
-                return False
-            else:
-                return remove_rank(kind_rank1, player1[1]) > remove_rank(kind_rank2, player2[1])
+            # Compare high card (one three of a kind must be higher than the other)
+            return kind_rank1 > kind_rank2
 
     elif kind_length2 == 3:
         return False
