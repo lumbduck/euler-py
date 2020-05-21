@@ -45,6 +45,10 @@ def pair_iter(start=1, asymmetric=True, strategy='descending'):
         :bool asymmetric: If True, i < j for all pairs. Otherwise all possible 2 tuples are traversed.
         :str strategy: Allows `ascending`, `descending`, or `alternating`. This determines if the first term is
             incremented or decremented as the second term increases. For `alternating`, they both alternate direction.
+
+    NOTE: With ascending and descending strategies, the first value never exceeds second.
+    TODO: Need to either update the docstring to clarify the above note
+        or make sure all strategies get to terms like (10, 9).
     """
     i = j = start
     if asymmetric:
