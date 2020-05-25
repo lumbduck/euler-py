@@ -11,31 +11,27 @@ It can be verified that the sum of the numbers on the diagonals is 101.
 
 What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way?
 """
-import time
+from itertools import count
 
-start_time = time.time()
+from common import elapsed
 
 side_limit = 1001
 
-diagonal_sum = 1
-square_count = 1  # How many squares have been built
-square_side = 3  # Num elements in side of current square
-square_origin = 2  # Where did the last square start
-corner = 1  # How many corners have been assigned to the current square
 
-n = 3  # Start from a corner and increment by the current square's side length (-1)
-while n <= side_limit ** 2:
-    diagonal_sum += n
+def gen_corners(max_width):
+    yield 1  # Central element
 
-    if corner == 4:
-        square_count += 1
-        square_side = square_count * 2 + 1
-        square_origin = n + 1
-        corner = 1
-    else:
-        corner += 1
-    n += square_side - 1
+    for i in count(1):
+        side_len = 2 * i  # 1 less than actual dimensions of square
+
+        if side_len + 1 > max_width:
+            return
+
+        # Yield four corners
+        last_corner = (side_len + 1)**2  # Easiest one to calculate
+        for j in range(3, -1, -1):
+            yield last_corner - j * side_len
 
 
-print("Sum of diagonals for {}x{} spiral: {}".format(side_limit, side_limit, diagonal_sum))
-print("Execution time: {}".format(time.time() - start_time))
+print(sum(gen_corners(side_limit)))
+elapsed()
