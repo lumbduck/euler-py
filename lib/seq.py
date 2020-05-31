@@ -210,19 +210,7 @@ def pandigitals(d, reverse_order=False, include_zero=True):
             yield int(''.join(n))
 
 
-# Closed form values from geometric sequences (along with inverse lookups and tests)
-
-def hexagonal_num(n):
-    """Return the nth hexagonal number."""
-    assert n > 0 and int(n) == n, "Must provide a positive integer."
-    return int(n * (2 * n - 1))
-
-
-def pentagonal_num(n):
-    """Return the nth pentagonal number."""
-    assert n > 0 and int(n) == n, "Must provide a positive integer."
-    return int(n * (3 * n - 1) / 2)
-
+# Closed form values for figurate (polygonal) sequences (along with inverse lookups and inclusion tests)
 
 def triangle_num(n):
     """Return the nth triangle number."""
@@ -230,36 +218,10 @@ def triangle_num(n):
     return int(n * (n + 1) / 2)
 
 
-def is_hexagonal(h):
-    """Return a positive integer n, such that `t` is the nth hexagonal number, if such an n exists."""
-    test_n = (1 + sqrt(1 + 8 * h)) / 4
-    return test_n.is_integer()
-
-
-def is_pentagonal(p):
-    """Return a positive integer n, such that `p` is the nth pentagonal number, if such an n exists."""
-    test_n = (1 + sqrt(1 + 24 * p)) / 6
-    return test_n.is_integer()
-
-
 def is_triangular(t):
-    """Return a positive integer n, such that `t` is the nth triangle number, if such an n exists."""
+    """Return True if there exists a positive integer n, such that `t` is the nth triangular number."""
     test_n = (-1 + sqrt(1 + 8 * t)) / 2
     return test_n.is_integer()
-
-
-def which_hexagonal_num(h):
-    """Return a positive integer n, such that `t` is the nth hexagonal number, if such an n exists."""
-    test_n = (1 + sqrt(1 + 8 * h)) / 4
-    if test_n.is_integer():
-        return int(test_n)
-
-
-def which_pentagonal_num(p):
-    """Return a positive integer n, such that `p` is the nth pentagonal number, if such an n exists."""
-    test_n = (1 + sqrt(1 + 24 * p)) / 6
-    if test_n.is_integer():
-        return int(test_n)
 
 
 def which_triangle_num(t):
@@ -269,5 +231,96 @@ def which_triangle_num(t):
         return int(test_n)
 
 
-for i in range(1, 100):
-    assert is_hexagonal(hexagonal_num(i)), "FAIL {}".format(i)
+def square_num(n):
+    """Return the nth square number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return n**2
+
+
+def is_square(s):
+    """Return True if there exists a positive integer n, such that `s` is the nth square number."""
+    test_n = sqrt(s)
+    return test_n.is_integer()
+
+
+def which_square_num(s):
+    """Return a positive integer n, such that `s` is the nth square number, if such an n exists."""
+    test_n = sqrt(s)
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def pentagonal_num(n):
+    """Return the nth pentagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return int(n * (3 * n - 1) / 2)
+
+
+def is_pentagonal(p):
+    """Return True if there exists a positive integer n, such that `p` is the nth pentagonal number."""
+    test_n = (1 + sqrt(1 + 24 * p)) / 6
+    return test_n.is_integer()
+
+
+def which_pentagonal_num(p):
+    """Return a positive integer n, such that `p` is the nth pentagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 24 * p)) / 6
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def hexagonal_num(n):
+    """Return the nth hexagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return n * (2 * n - 1)
+
+
+def is_hexagonal(h):
+    """Return True if there exists a positive integer n, such that `h` is the nth hexagonal number."""
+    test_n = (1 + sqrt(1 + 8 * h)) / 4
+    return test_n.is_integer()
+
+
+def which_hexagonal_num(h):
+    """Return a positive integer n, such that `h` is the nth hexagonal number, if such an n exists."""
+    test_n = (1 + sqrt(1 + 8 * h)) / 4
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def heptagonal_num(n):
+    """Return the nth heptagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return int(n * (5 * n - 3) / 2)
+
+
+def is_heptagonal(h):
+    """Return True if there exists a positive integer n, such that `h` is the nth heptagonal number."""
+    test_n = (3 + sqrt(9 + 40 * h)) / 10
+    return test_n.is_integer()
+
+
+def which_heptagonal_num(h):
+    """Return a positive integer n, such that `h` is the nth heptagonal number, if such an n exists."""
+    test_n = (3 + sqrt(9 + 40 * h)) / 10
+    if test_n.is_integer():
+        return int(test_n)
+
+
+def octagonal_num(n):
+    """Return the nth octagonal number."""
+    assert n > 0 and int(n) == n, "Must provide a positive integer."
+    return n * (3 * n - 2)
+
+
+def is_octagonal(o):
+    """Return True if there exists a positive integer n, such that `o` is the nth octagonal number."""
+    test_n = (2 + sqrt(4 + 12 * o)) / 6
+    return test_n.is_integer()
+
+
+def which_octagonal_num(o):
+    """Return a positive integer n, such that `o` is the nth octagonal number, if such an n exists."""
+    test_n = (2 + sqrt(4 + 12 * o)) / 6
+    if test_n.is_integer():
+        return int(test_n)
