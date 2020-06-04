@@ -2,6 +2,7 @@ from functools import lru_cache, reduce
 from itertools import count, product, takewhile
 from math import sqrt
 from operator import mul
+from random import sample
 
 
 # A cache of sequential primes for avoiding multiple runs of :func sieve_primes:
@@ -28,7 +29,7 @@ def sieve_primes(max_prime=None, num_primes=None):
     if max_prime and max_prime <= CACHED_PRIMES_L[-1]:
         return [p for p in CACHED_PRIMES_L if p <= max_prime]
     elif num_primes and num_primes <= len(CACHED_PRIMES):
-        return CACHED_PRIMES_L[:num_primes + 1]
+        return CACHED_PRIMES_L[:num_primes]
 
     # Special case for 2 since we don't want to deal with even numbers
     elif max_prime == 2 or num_primes == 1:
@@ -72,22 +73,17 @@ def sieve_primes(max_prime=None, num_primes=None):
     return primes
 
 
-def primes(start_index=0, step=10000, reverse=False):
+def primes(start_index=0, step=10_000, reverse=False):
     """Return infinite generator of primes, where :param step: indicates how to compromise performance by looking ahead."""
     assert step >= 3, ":param step: must be at least 3"
 
     low_index = start_index
 
     for i in count(1):
-        # Update cache while getting upper index for this step
+        # Update cache while getting limits for this step
         high_index = len(sieve_primes(step * i))
-
-        # # XXX
-        # print("INDECES: {}, {}".format(low_index, high_index))
-        # if high_index > 10:
-        #     break
-
         low_index = max(start_index, low_index)
+
         if high_index <= low_index:
             # Either we haven't reached the starting index yet, or the step was too small to find another prime
 
@@ -239,6 +235,74 @@ def is_prime(n, cache_primes=True):
                 for test_factor in (6 * k - 1, 6 * k + 1):
                     if n % test_factor == 0:
                         return False
+
+    return True
+
+
+def miller_rabin(n, sample_size=None):
+    """
+    Return True if n is probably prime, by Miller-Rabin test.
+
+    WIP: DO NOT USE FOR n<10_000
+
+    Typically, a sample size should only be given for numbers greater than 3.14 * 10**14.
+    Otherwise, sampling is based on a known result
+    (see https://mathworld.wolfram.com/Rabin-MillerStrongPseudoprimeTest.html)
+    """
+    if n < 2:
+        return False
+    elif n in (2, 3, 5):
+        return True
+    elif n % 2 == 0 or n % 3 == 0 or n % 5 == 0:
+        return False
+    elif n < 11:
+        # 7 is all that's left under 11
+        return True
+
+    # Set up variables for Miller-Rabin (expressing n-1 as 2^k * d, with d odd)
+    n_decr = n - 1
+    k = 1
+    d = n_decr // 2
+    while d % 2 == 0:
+        d = d // 2
+        k += 1
+
+    # Get test case samples
+    if sample_size:
+        # Take random sample
+        test_sample = sample(range(2, n_decr), sample_size)
+    else:
+        # Take first 7 primes
+        test_sample = sieve_primes(num_primes=7)
+
+    # In the following section, all branches that return False are deterministic,
+    # but any other outcome means that n is only PROBABLY prime
+    for test_case in test_sample:
+        # Fermat
+        if test_case ** n_decr % n != 1:
+            # Definitely not prime
+            return False
+
+        # Miller-Rabin
+        if test_case ** d % n in (1, n_decr):
+            # Probably prime
+            continue
+
+        if k == 1:
+            return False
+
+        skip_end = False
+        for j in range(k - 1):
+            test_power = (test_case ** (2**j) * d) % n
+            if test_power == 1:
+                return False
+            elif test_power == n_decr:
+                # Probably prime
+                skip_end = True
+                break
+
+        if not skip_end and (test_case ** (2**(k - 1)) * d) % n == 1:
+            return False
 
     return True
 
