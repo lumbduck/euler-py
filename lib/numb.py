@@ -14,7 +14,13 @@ def num_digits(n, base=10):
     if n == 0:
         return 1
     else:
-        return math.floor(math.log(n, base)) + 1
+        if base == 10:
+            this_log = math.log10
+        elif base == 2:
+            this_log = math.log2
+        else:
+            return math.floor(math.log(n, base)) + 1
+        return math.floor(this_log(n)) + 1
 
 
 def same_digits(n, digits):
