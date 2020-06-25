@@ -5,7 +5,7 @@ The 5-digit number, 16807=7^5, is also a fifth power. Similarly, the 9-digit num
 
 How many n-digit positive integers exist which are also an nth power?
 """
-from itertools import count, takewhile
+from itertools import count
 
 from numb import num_digits
 
