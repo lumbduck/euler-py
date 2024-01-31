@@ -28,7 +28,7 @@ try:
             print("\t{}, {}".format(r_0, r_1))
         i += 1
 
-except(KeyboardInterrupt):
+except KeyboardInterrupt:
     print("Interrupted...")
 
 print("Total coprime of {} random whole numbers (up to {}): {}".format(i, upper_lim, coprime_total))
