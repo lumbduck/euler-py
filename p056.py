@@ -5,7 +5,7 @@ A googol (10^100) is a massive number: one followed by one-hundred zeros; 100^10
 
 Considering natural numbers of the form, a^b, where a, b < 100, what is the maximum digital sum?
 """
-from common import elapsed
+from lib.common import elapsed
 
 print(max(sum(int(d) for d in str(b**a)) for a in range(90, 100) for b in range(90, 100)))
 elapsed()

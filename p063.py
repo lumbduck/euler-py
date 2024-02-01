@@ -7,9 +7,9 @@ How many n-digit positive integers exist which are also an nth power?
 """
 from itertools import count
 
-from numb import num_digits
+from lib.numb import num_digits
 
-from common import elapsed
+from lib.common import elapsed
 
 total = 0
 for n in count(1):

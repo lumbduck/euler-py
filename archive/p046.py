@@ -19,7 +19,7 @@ from math import sqrt
 import time
 from timeit import timeit
 
-from prime import is_prime, primes, sieve_primes
+from lib.prime import is_prime, primes, sieve_primes
 
 start_time = time.time()
 

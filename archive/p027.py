@@ -17,7 +17,7 @@ Find the product of the coefficients, a and b, for the quadratic expression that
 """
 import time
 
-from prime import is_prime, sieve_primes
+from lib.prime import is_prime, sieve_primes
 
 start_time = time.time()
 

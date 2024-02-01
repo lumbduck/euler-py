@@ -13,7 +13,7 @@ What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed 
 """
 from itertools import count
 
-from common import elapsed
+from lib.common import elapsed
 
 side_limit = 1001
 

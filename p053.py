@@ -15,8 +15,8 @@ How many, not necessarily distinct, values of comb(n, r) for 1≤n≤100, are gr
 """
 from numpy import array, convolve, float64
 
-from numb import comb
-from common import elapsed
+from lib.numb import comb
+from lib.common import elapsed
 
 lower_bound = 1000000
 n_limit = 100

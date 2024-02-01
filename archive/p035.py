@@ -5,7 +5,7 @@ There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73
 
 How many circular primes are there below one million?
 """
-from prime import sieve_primes
+from lib.prime import sieve_primes
 import time
 
 start_time = time.time()

@@ -23,7 +23,7 @@ from collections import deque
 from itertools import accumulate, cycle, islice, takewhile
 from fractions import Fraction
 
-from common import elapsed
+from lib.common import elapsed
 
 limit = 1000
 

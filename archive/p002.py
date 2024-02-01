@@ -7,8 +7,8 @@ By considering the terms in the Fibonacci sequence whose values do not exceed fo
 """
 from itertools import takewhile
 
-from common import elapsed
-from seq import fib
+from lib.common import elapsed
+from lib.seq import fib
 
 limit = 4000000
 

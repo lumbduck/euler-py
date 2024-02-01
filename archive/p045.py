@@ -11,7 +11,7 @@ Find the next triangle number that is also pentagonal and hexagonal.
 from itertools import count
 import time
 
-from seq import is_hexagonal, is_pentagonal, triangle_num
+from lib.seq import is_hexagonal, is_pentagonal, triangle_num
 
 initial_value = 285
 assert is_hexagonal(triangle_num(initial_value)) and is_pentagonal(triangle_num(initial_value)), "Invalid."

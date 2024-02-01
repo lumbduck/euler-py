@@ -11,7 +11,7 @@ from functools import lru_cache
 from string import digits
 import time
 
-from numb import num_digits, reverse
+from lib.numb import num_digits, reverse
 
 start_time = time.time()
 

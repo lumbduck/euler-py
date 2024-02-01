@@ -14,7 +14,7 @@ from itertools import takewhile
 from operator import itemgetter
 from time import time
 
-from prime import is_prime, primes
+from lib.prime import is_prime, primes
 
 limit = 1000000
 

@@ -7,10 +7,10 @@ Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain
 """
 from itertools import count
 
-from numb import same_digits
+from lib.numb import same_digits
 
 # Load last
-from common import elapsed
+from lib.common import elapsed
 
 
 def run():

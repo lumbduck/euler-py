@@ -19,9 +19,9 @@ Find the sum of the only ordered set of six cyclic 4-digit numbers for which eac
 from functools import lru_cache
 from itertools import count
 
-from seq import triangle_num, square_num, pentagonal_num, hexagonal_num, heptagonal_num, octagonal_num
+from lib.seq import triangle_num, square_num, pentagonal_num, hexagonal_num, heptagonal_num, octagonal_num
 
-from common import elapsed
+from lib.common import elapsed
 
 f_count = 6
 f_funcs = (triangle_num, square_num, pentagonal_num, hexagonal_num, heptagonal_num, octagonal_num)

@@ -8,8 +8,8 @@ Find the lowest sum for a set of five primes for which any two primes concatenat
 from collections import defaultdict
 from itertools import chain
 
-from prime import is_prime, primes, sieve_primes
-from common import elapsed, split_timer
+from lib.prime import is_prime, primes, sieve_primes
+from lib.common import elapsed, split_timer
 
 target_set_size = 5
 

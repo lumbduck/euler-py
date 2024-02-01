@@ -8,7 +8,7 @@ https://math.stackexchange.com/questions/265690/continued-fraction-of-a-square-r
 """
 from math import sqrt
 
-from common import elapsed
+from lib.common import elapsed
 
 
 def is_odd_period(n):

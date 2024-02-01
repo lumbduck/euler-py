@@ -17,7 +17,7 @@ Find the first four consecutive integers to have four distinct prime factors eac
 from itertools import count
 import time
 
-from prime import prime_factors_precomputed
+from lib.prime import prime_factors_precomputed
 
 start_time = time.time()
 

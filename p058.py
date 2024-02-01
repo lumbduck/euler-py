@@ -18,9 +18,9 @@ If one complete new layer is wrapped around the spiral above, a square spiral wi
 from collections import deque
 from itertools import accumulate, count, takewhile
 
-from prime import is_prime
+from lib.prime import is_prime
 
-from common import elapsed
+from lib.common import elapsed
 
 ratio_limit = 10
 

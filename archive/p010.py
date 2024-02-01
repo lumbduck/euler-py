@@ -5,8 +5,8 @@ Find the sum of all the primes below two million.
 """
 from datetime import datetime
 
-from common import elapsed
-from prime import sieve_primes
+from lib.common import elapsed
+from lib.prime import sieve_primes
 
 start_time = datetime.now()
 

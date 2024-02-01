@@ -16,7 +16,7 @@ from functools import lru_cache
 from itertools import cycle, product, starmap
 from string import ascii_lowercase
 
-from common import data, elapsed
+from lib.common import data, elapsed
 
 
 # Highest frequency English-language characters, with space and punctuation included

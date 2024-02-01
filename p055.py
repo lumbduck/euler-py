@@ -17,8 +17,8 @@ Surprisingly, there are palindromic numbers that are themselves Lychrel numbers;
 
 How many Lychrel numbers are there below ten-thousand?
 """
-from numb import is_palindrome, reverse
-from common import elapsed
+from lib.numb import is_palindrome, reverse
+from lib.common import elapsed
 
 limit = 10000
 iter_limit = 50

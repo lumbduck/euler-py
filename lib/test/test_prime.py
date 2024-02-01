@@ -1,5 +1,5 @@
 from functools import update_wrapper
-import prime
+import lib.prime as prime
 import pytest
 
 

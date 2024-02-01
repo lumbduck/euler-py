@@ -10,7 +10,7 @@ Find the pair of pentagonal numbers, Pj and Pk, for which their sum and differen
 from itertools import count
 import time
 
-from seq import pentagonal_num, which_pentagonal_num
+from lib.seq import pentagonal_num, which_pentagonal_num
 
 start_time = time.time()
 

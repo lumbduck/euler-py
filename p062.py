@@ -9,9 +9,9 @@ from collections import defaultdict
 from itertools import count
 from math import ceil, factorial
 
-from numb import same_digits
+from lib.numb import same_digits
 
-from common import elapsed, split_timer
+from lib.common import elapsed, split_timer
 
 target = 5
 

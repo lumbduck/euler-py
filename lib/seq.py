@@ -1,7 +1,7 @@
 from itertools import permutations
 from math import sqrt
 
-from numb import incr, POSITIVE_DIGITS, reverse, to_base, to_str
+from .numb import incr, POSITIVE_DIGITS, reverse, to_base, to_str
 
 
 # Generators

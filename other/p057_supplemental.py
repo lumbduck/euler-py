@@ -3,9 +3,9 @@ This file contains material for calculating cycles in the sequence of gaps that 
 """
 from itertools import accumulate, chain, cycle
 
-from numb import num_digits
+from lib.numb import num_digits
 
-from common import elapsed, split_timer
+from lib.common import elapsed, split_timer
 
 # First few cycles keyed by the expansion iteration where they begin
 # Further cycles alternate between the 2nd and 3rd, switching cycles around every 3700-4700 terms of the fraction expansion

@@ -10,7 +10,7 @@ Find the sum of all the positive integers which cannot be written as the sum of 
 from datetime import datetime
 from functools import lru_cache
 
-from prime import sum_divisors
+from lib.prime import sum_divisors
 
 start_time = datetime.now()
 

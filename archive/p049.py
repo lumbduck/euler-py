@@ -10,8 +10,8 @@ What 12-digit number do you form by concatenating the three terms in this sequen
 from itertools import takewhile
 from time import time
 
-from numb import perm
-from prime import is_prime, primes
+from lib.numb import perm
+from lib.prime import is_prime, primes
 
 
 def primes_four():

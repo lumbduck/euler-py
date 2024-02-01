@@ -42,7 +42,7 @@ The file, p54_data/poker.txt, contains one-thousand random hands dealt to two pl
 
 How many hands does Player 1 win?
 """
-from common import elapsed
+from lib.common import elapsed
 
 f_path = 'data/p54_poker.txt'
 

@@ -5,8 +5,8 @@ What is the largest n-digit pandigital prime that exists?
 """
 import time
 
-from prime import is_prime
-from seq import pandigitals
+from lib.prime import is_prime
+from lib.seq import pandigitals
 
 start_time = time.time()
 

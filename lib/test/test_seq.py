@@ -1,4 +1,4 @@
-import seq
+import lib.seq as seq
 import pytest
 
 

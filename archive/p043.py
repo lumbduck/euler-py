@@ -14,8 +14,8 @@ Find the sum of all 0 to 9 pandigital numbers with this property.
 """
 import time
 
-from prime import sieve_primes
-from seq import pandigitals
+from lib.prime import sieve_primes
+from lib.seq import pandigitals
 
 start_time = time.time()
 
