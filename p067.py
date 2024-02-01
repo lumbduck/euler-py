@@ -17,11 +17,11 @@ NOTE: This is a much more difficult version of Problem 18. It is not possible to
 f_path = 'data/p67_triangle.txt'
 data = []
 with open(f_path) as f:
-    for l in f:
-        data.append([int(x) for x in l.split()])
+    for line in f:
+        data.append([int(x) for x in line.split()])
 
 # initialize lists for storing intermediate path lengths
-path_lengths = [[0] * len(l) for l in data]
+path_lengths = [[0] * len(line) for line in data]
 
 
 def get_parents(row, column):
