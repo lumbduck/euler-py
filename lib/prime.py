@@ -21,6 +21,13 @@ def clear_prime_cache():
     update_prime_cache([2])
 
 
+def get_cached_primes(as_set=False):
+    if as_set:
+        return CACHED_PRIMES
+    else:
+        return CACHED_PRIMES_L
+
+
 def sieve_primes(max_prime=None, num_primes=None):
     if (not max_prime and not num_primes):
         raise TypeError("Must provide an integer for at least one of :max_prime: or :num_primes:")
@@ -49,9 +56,8 @@ def sieve_primes(max_prime=None, num_primes=None):
     condition_limit = max_prime + 1 if max_prime else num_primes - 1
 
     while condition_basis < condition_limit:
-        sqrt_test_num = sqrt(test_num)
         is_composite = False
-        for p in takewhile(lambda x: x <= sqrt_test_num, primes):
+        for p in takewhile(lambda x: x <= sqrt(test_num), primes):
             if test_num % p == 0:
                 is_composite = True
                 break
@@ -114,6 +120,7 @@ def primes(start_index=0, step=10_000, reverse=False):
 
 
 # Factoring tools
+@lru_cache(maxsize=None)
 def reduce_by_factor(n, reduct):
     n_reduced = n
     reduct_count = 0
@@ -237,6 +244,25 @@ def is_prime(n, cache_primes=True):
                         return False
 
     return True
+
+
+@lru_cache(maxsize=None)
+def gcd(x, y):
+    "Return the greatest common divisor of x and y."
+    if x == 0:
+        return y
+    else:
+        return gcd(y % x, x)
+
+
+def is_coprime(x, y):
+    """
+    Return True if x and y are coprimes (relatively prime to each other).
+
+    Two integers, x and y, are coprime if their greatest common divisor is 1; i.e., gcd(x,y)=1.
+    """
+    # Try to solve for a and b such that a*x + b*y = 1; i.e., y = 1/b + (a/b)*x
+    return gcd(x, y) == 1
 
 
 def miller_rabin(n, sample_size=None):
