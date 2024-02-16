@@ -87,7 +87,7 @@ def primes(start_index=0, step=10_000, reverse=False):
 
     for i in count(1):
         # Update cache while getting limits for this step
-        high_index = len(sieve_primes(step * i))
+        high_index = len(sieve_primes(num_primes=step * i))
         low_index = max(start_index, low_index)
 
         if high_index <= low_index:
