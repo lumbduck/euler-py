@@ -1,3 +1,4 @@
+from collections import Counter
 from functools import lru_cache, reduce
 from itertools import permutations
 import math
@@ -76,6 +77,11 @@ def is_palindrome(x):
 
 def is_pandigital(n, pandigits):
     return num_digits(n) == len(pandigits) and set(str(n)) == set(pandigits)
+
+
+def is_permutation(m, n, base=10):
+    "Return True if the digits of m and n are a permutation of each other."
+    return Counter(to_str(m, base=base)) == Counter(to_str(n, base=base))
 
 
 def to_base(n, base=10):
